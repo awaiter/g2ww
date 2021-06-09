@@ -1,0 +1,9 @@
+apps:
+- name: g2ww
+  instances: 1
+  exec_mode: fork
+  exec_interpreter: "none"
+  script: "./g2ww"
+  env:
+    GIN_MODE: release
+    NB_ENV: develop

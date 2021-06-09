@@ -1,48 +1,47 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
-	"time"
+	"strconv"
+
+	// "fmt"
+	"g2ww/config"
+	"g2ww/router"
+
+	"github.com/gofiber/compression"
+	"github.com/gofiber/fiber"
 )
 
-// http服务
-var srv *http.Server
+// 读取配置文件中的config
+var (
+	Port = strconv.Itoa(config.Config.Port)
+)
 
 func main() {
-	app := gin.Default()
+
+	app := fiber.New()
+	var ListenAddress string
+
+	// 判断：默认端口号为2408
+	if Port == "" {
+		Port = "2408"
+	}
+
+	if os.Getenv("DOCKER") != "" {
+		ListenAddress = "0.0.0.0" + ":" + Port
+	} else {
+		ListenAddress = "127.0.0.1" + ":" + Port
+	}
+
 	// Server Info
-	app.GET("/", GetSendCount)
-	app.POST("/send", SendMsg)
-	srv = &http.Server{
-		Addr:    "0.0.0.0:88",
-		Handler: app,
-	}
+	app.Use(compression.New())
+	app.Get("/", router.GwStat())
+	// app.All("/:key", GwWorker())
+	app.Post("/:key", router.GwWorker())
 
-	//启动http请求
-	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			panic(err)
-		}
-	}()
-	shutdown()
-}
+	v1 := app.Group("/send")
+	v1.Post("/:key", router.GwWorker())
 
-// 优雅的关闭
-func shutdown() {
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt, os.Kill, syscall.SIGQUIT)
-	<-quit
+	app.Listen(ListenAddress)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := srv.Shutdown(ctx); err != nil {
-		fmt.Errorf("Server Shutdown:[%v]", err)
-		return
-	}
 }

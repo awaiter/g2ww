@@ -1,22 +1,23 @@
-# grafana-wecaht-alert
-grafana 企业微信 报警系统
-### 介绍
-+ 前提你已经在 [企业微信文档](https://work.weixin.qq.com/api/doc/90000/90136/91770) 申请过账号，也已经配置好配置好key
-### 打包文件
+# G2WW (Grafana 2 Wechat Work)
+Grafna webhook--企业微信机器人
+
+## Build g2ww
+
 ```
-    go build main.go -o wechat-alert
+go build
 ```
-### 配置请求方式
+
+## Run g2ww
+
 ```
- 1. 在grafana中配置webhook
- 2. Webhook settings里添写 
-    http://你的ip:88/send/key=微信的key
- 3. 点击Send Test 
- 
- 备注：Username和Password 无关紧要，可以随意填写。
+# 修改配置文件
+# config.yml
+# nohup ./g2ww & 或 pm2 start pm2.yml
 ```
-### 备注
-代码里实现了 发送企业微信的两种类型的消息。
-+ markdown（默认）
-+ news
-### 结束
+
+## 填入企业微信机器人地址
+参考
+```
+# webhook https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f5134a5e-7413-41e3-90a5-3543f95f887b
+# post http://localhost:2408/send/f5134a5e-7413-41e3-90a5-3543f95f887b
+```
