@@ -1,0 +1,23 @@
+- hosts: all
+  gather_facts: no
+  remote_user: root
+
+  tasks:
+    - name: copy pm2.yml
+      copy:
+        src:  pm2.yml
+        dest: /mnt/pm2-projects/g2ww/
+
+    - name: copy config file
+      copy:
+        src:  tmp.config.yml
+        dest: /mnt/pm2-projects/g2ww/config.yml
+
+    - name: copy g2ww
+      copy:
+        src:  g2ww
+        dest: /mnt/pm2-projects/g2ww/
+        mode: 0755
+
+    - name: restart g2ww
+      shell: cd /mnt/pm2-projects/g2ww/  &&  pm2 restart pm2.yml

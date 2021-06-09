@@ -1,0 +1,14 @@
+port: 2408
+
+grafana:
+  url: "http://test-devops.ujing.online:3001"
+  # 环境, 默认"test": 选参: test, production
+  env: "test"
+
+webhook: 
+  type: "workweixin"
+  url: "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key="
+  # 消息类型, 默认"markdown"; 选参: text, markdown, image, news, file
+  msgtype: "markdown"
+  # 被@用户
+  atuser: "suntao"
