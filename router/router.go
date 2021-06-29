@@ -115,6 +115,7 @@ func GwWorker() func(c *fiber.Ctx) {
                         "msgtype": "markdown",
                         "markdown": {
                           "content": "#### Grafana %s告警 \n <font color=\"%s\">%s</font> \n <font color=\"comment\">%s</font>\n [查看详情](%s) %s"
+			}
                 }
                 `, Env_text, Color, h.Title, h.Message, alert_url, Atuer_text)
 
